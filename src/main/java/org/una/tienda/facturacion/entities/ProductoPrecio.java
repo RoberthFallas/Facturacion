@@ -17,9 +17,11 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -47,9 +49,11 @@ public class ProductoPrecio implements Serializable {
     private Boolean estado;
     @Column(name = "fecha_Registro")
     @Temporal(TemporalType.TIMESTAMP)
+    @Setter(AccessLevel.NONE)
     private Date fechaRegistro;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_modificacion")
+    @Setter(AccessLevel.NONE)
     private Date fechaModificacion;
     @Column(name = "precio_colones")
     private Double precioColones;

@@ -5,6 +5,7 @@
  */
 package org.una.tienda.facturacion.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,9 +17,11 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -31,7 +34,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Factura {
+public class Factura implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,9 +49,11 @@ public class Factura {
     private Boolean estado;
     @Column(name = "fecha_Registro")
     @Temporal(TemporalType.TIMESTAMP)
+    @Setter(AccessLevel.NONE)
     private Date fechaRegistro;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_modificacion")
+    @Setter(AccessLevel.NONE)
     private Date fechaModificacion;
 
     @PrePersist
