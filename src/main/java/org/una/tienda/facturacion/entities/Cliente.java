@@ -7,11 +7,14 @@ package org.una.tienda.facturacion.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -34,7 +37,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Clientes implements Serializable {
+public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,6 +62,8 @@ public class Clientes implements Serializable {
     private String nombre;
     @Column(length = 8, name = "telefono")
     private String telefono;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteId")
+    private List<Factura> facturaList;
 
     @PrePersist
     public void prePersist() {
