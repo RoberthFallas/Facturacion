@@ -86,8 +86,21 @@ class FacturaDetalleServiceImplementationTest {
             facturaDetalleEjemplo = null;
             Assertions.assertTrue(true);
         }
+    }
 
+    @Test
+    public void seEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
+        initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido();
 
+        assertThrows(ProductoConDescuentoMayorAlPermitidoException.class,
+                () -> {
+                    FacturaDetalleDTO facturaDetallePruebaConExtraDescuento = new FacturaDetalleDTO();
+                    facturaDetalleService.create(facturaDetallePruebaConExtraDescuento);
+                }
+        );
+    }
+
+    private void initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
     }
 
 
