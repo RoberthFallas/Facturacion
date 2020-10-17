@@ -5,10 +5,14 @@
  */
 package org.una.tienda.facturacion.repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.una.tienda.facturacion.entities.Cliente;
+import org.una.tienda.facturacion.entities.Producto;
+
 /**
  *
  * @author LordLalo
  */
-public interface IClienteRepository {
+public interface IClienteRepository  extends JpaRepository<Cliente, Long> {
     
 }
