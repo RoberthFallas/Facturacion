@@ -62,7 +62,6 @@ public class Producto implements Serializable {
     private List<ProductoPrecio> productPreciotList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoId")
     private List<FacturaDetalle> facturaDetalleList;
-    
 
     @PrePersist
     public void prePersist() {
