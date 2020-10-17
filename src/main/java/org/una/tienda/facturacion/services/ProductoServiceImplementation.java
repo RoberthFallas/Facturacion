@@ -26,12 +26,13 @@ public class ProductoServiceImplementation implements IProductoService {
 
     private Optional<ProductoDTO> oneToDto(Optional<Producto> one) {
         if (one.isPresent()) {
-            ProductoDTO ProductoDTO = MapperUtils.DtoFromEntity(one.get(),   ProductoDTO.class);
+            ProductoDTO ProductoDTO = MapperUtils.DtoFromEntity(one.get(), ProductoDTO.class);
             return Optional.ofNullable(ProductoDTO);
         } else {
             return null;
         }
     }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<ProductoDTO> findById(Long id) {
@@ -51,11 +52,20 @@ public class ProductoServiceImplementation implements IProductoService {
 
     @Override
     @Transactional
+    public Optional<ProductoDTO> update(ProductoDTO usuarioDTO, Long id) {
+        if (productoRepository.findById(id).isPresent()) {
+            Producto producto = MapperUtils.EntityFromDto(usuarioDTO, Producto.class);
+            producto = productoRepository.save(producto);
+            return Optional.ofNullable(MapperUtils.DtoFromEntity(producto, ProductoDTO.class));
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
     public void delete(Long id) {
         productoRepository.deleteById(id);
     }
-
-   
-
 
 }

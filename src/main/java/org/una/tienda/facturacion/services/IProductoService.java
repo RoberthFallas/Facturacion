@@ -20,4 +20,6 @@ public interface IProductoService {
 
     public Optional<ProductoDTO> findById(Long id);
 
+    public Optional<ProductoDTO> update(ProductoDTO productoDTO, Long id);
+
 }
