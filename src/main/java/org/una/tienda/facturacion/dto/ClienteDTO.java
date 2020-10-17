@@ -19,7 +19,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ClientesDTO {
+public class ClienteDTO {
 
     private Long id;
     private String direccion;

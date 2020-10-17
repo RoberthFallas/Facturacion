@@ -5,11 +5,11 @@
  */
 package org.una.tienda.facturacion.dto;
 
+
 import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.una.tienda.facturacion.entities.Producto;
+
 
 /**
  *
@@ -28,5 +28,9 @@ public class ProductoPrecioDTO {
     private Date fechaRegistro;
     private Date fechaModificacion;
     private Double precioColones;
+    private ProductoDTO producto;
+    
+    
+    
 
 }
