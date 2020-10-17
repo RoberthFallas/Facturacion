@@ -28,40 +28,40 @@ import lombok.ToString;
 
 /**
  *
- * @author LordLalo
+ * @author Roberth :)
  */
 @Entity
-@Table(name = "ut_facturas_detalles")
+@Table(name = "ut_productos_precios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FacturaDetalle implements Serializable {
+public class ProductoPrecio implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-
-    @Column
-    private boolean estado;
-    @Column(name = "fecha_registro", updatable = false)
+    @Column(name = "descuento_maximo")
+    private Double descuentoMaximo;
+    @Column(name = "descuento_promocional")
+    private Double descuentoPromocional;
+    @Column(name = "estado")
+    private Boolean estado;
+    @Column(name = "fecha_Registro")
     @Temporal(TemporalType.TIMESTAMP)
     @Setter(AccessLevel.NONE)
     private Date fechaRegistro;
-    @Column(name = "fecha_modificacion")
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_modificacion")
     @Setter(AccessLevel.NONE)
     private Date fechaModificacion;
-    @Column
-    private double cantidad;
-    @Column
-    private double descuento_final;
+    @Column(name = "precio_colones")
+    private Double precioColones;
     @JoinColumn(name = "productos_id", referencedColumnName = "id")
     @ManyToOne
     private Producto productoId;
-    @JoinColumn(name = "facturas_id", referencedColumnName = "id")
-    @ManyToOne
-    private Factura facturasId;
 
     @PrePersist
     public void prePersist() {
@@ -73,4 +73,5 @@ public class FacturaDetalle implements Serializable {
     public void preUpdate() {
         fechaModificacion = new Date();
     }
+
 }

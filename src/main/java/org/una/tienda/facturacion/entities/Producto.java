@@ -7,11 +7,16 @@ package org.una.tienda.facturacion.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,7 +48,7 @@ public class Producto implements Serializable {
     private boolean estado;
     @Column(name = "fecha_registro", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @Setter(AccessLevel.NONE)   
+    @Setter(AccessLevel.NONE)
     private Date fechaRegistro;
     @Column(name = "fecha_modificacion")
     @Temporal(TemporalType.TIMESTAMP)
@@ -51,6 +56,23 @@ public class Producto implements Serializable {
     private Date fechaModificacion;
     @Column
     private double impuesto;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoId")
+    private List<ProductoExistencia> productExistList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoId")
+    private List<ProductoPrecio> productPreciotList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoId")
+    private List<FacturaDetalle> facturaDetalleList;
     
-    
+
+    @PrePersist
+    public void prePersist() {
+        fechaRegistro = new Date();
+        fechaModificacion = new Date();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        fechaModificacion = new Date();
+    }
+
 }

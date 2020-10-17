@@ -7,13 +7,14 @@ package org.una.tienda.facturacion.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -28,40 +29,41 @@ import lombok.ToString;
 
 /**
  *
- * @author LordLalo
+ * @author Roberth :)
  */
 @Entity
-@Table(name = "ut_facturas_detalles")
+@Table(name = "ut_clientes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FacturaDetalle implements Serializable {
+public class Cliente implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-
-    @Column
-    private boolean estado;
-    @Column(name = "fecha_registro", updatable = false)
+    @Column(length = 100, name = "direccion")
+    private String direccion;
+    @Column(length = 100, name = "email")
+    private String email;
+    @Column(name = "estado")
+    private Boolean estado;
+    @Column(name = "fecha_Registro")
     @Temporal(TemporalType.TIMESTAMP)
     @Setter(AccessLevel.NONE)
     private Date fechaRegistro;
-    @Column(name = "fecha_modificacion")
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_modificacion")
     @Setter(AccessLevel.NONE)
     private Date fechaModificacion;
-    @Column
-    private double cantidad;
-    @Column
-    private double descuento_final;
-    @JoinColumn(name = "productos_id", referencedColumnName = "id")
-    @ManyToOne
-    private Producto productoId;
-    @JoinColumn(name = "facturas_id", referencedColumnName = "id")
-    @ManyToOne
-    private Factura facturasId;
+    @Column(length = 100, name = "nombre")
+    private String nombre;
+    @Column(length = 8, name = "telefono")
+    private String telefono;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteId")
+    private List<Factura> facturaList;
 
     @PrePersist
     public void prePersist() {
@@ -73,4 +75,5 @@ public class FacturaDetalle implements Serializable {
     public void preUpdate() {
         fechaModificacion = new Date();
     }
+
 }

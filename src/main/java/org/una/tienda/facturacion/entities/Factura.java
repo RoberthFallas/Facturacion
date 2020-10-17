@@ -7,6 +7,8 @@ package org.una.tienda.facturacion.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -28,40 +31,40 @@ import lombok.ToString;
 
 /**
  *
- * @author LordLalo
+ * @author Roberth :)
  */
 @Entity
-@Table(name = "ut_facturas_detalles")
+@Table(name = "ut_facturas")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FacturaDetalle implements Serializable {
+public class Factura implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-
-    @Column
-    private boolean estado;
-    @Column(name = "fecha_registro", updatable = false)
+    @Column(name = "caja", length = 11)
+    private Integer caja;
+    @Column(name = "descuento_general")
+    private Integer descuentoGeneral;
+    @Column(name = "estado")
+    private Boolean estado;
+    @Column(name = "fecha_Registro")
     @Temporal(TemporalType.TIMESTAMP)
     @Setter(AccessLevel.NONE)
     private Date fechaRegistro;
-    @Column(name = "fecha_modificacion")
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_modificacion")
     @Setter(AccessLevel.NONE)
     private Date fechaModificacion;
-    @Column
-    private double cantidad;
-    @Column
-    private double descuento_final;
-    @JoinColumn(name = "productos_id", referencedColumnName = "id")
+    @JoinColumn(name = "clientes_id", referencedColumnName = "id")
     @ManyToOne
-    private Producto productoId;
-    @JoinColumn(name = "facturas_id", referencedColumnName = "id")
-    @ManyToOne
-    private Factura facturasId;
+    private Cliente clienteId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "facturasId")
+    private List<FacturaDetalle> facturaDetalleList;
 
     @PrePersist
     public void prePersist() {
@@ -73,4 +76,5 @@ public class FacturaDetalle implements Serializable {
     public void preUpdate() {
         fechaModificacion = new Date();
     }
+
 }
