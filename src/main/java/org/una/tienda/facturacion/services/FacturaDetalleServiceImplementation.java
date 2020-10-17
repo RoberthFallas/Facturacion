@@ -53,23 +53,31 @@ public class FacturaDetalleServiceImplementation implements IFacturaDetalleServi
             return null;
         }
     }
+//
+//    @Override
+//    @Transactional
+//    public FacturaDetalleDTO create(FacturaDetalleDTO facturaDetalle) throws ProductoConDescuentoMayorAlPermitidoException {
+//
+//        Optional<ProductoPrecioDTO> productoPrecio = productoPrecioService.findById(facturaDetalle.getProducto().getId());
+//
+//        if (productoPrecio.isEmpty()) {
+//            //TODO:implementar verificar existencia de asignacion de precios
+//            return null;
+//        }
+//        if (facturaDetalle.getDescuento_final() > productoPrecio.get().getDescuentoMaximo()) {
+//            throw new ProductoConDescuentoMayorAlPermitidoException("Se intenta facturar un producto con un descuento mayor al permitido");
+//        }
+//        FacturaDetalle usuario = MapperUtils.EntityFromDto(facturaDetalle, FacturaDetalle.class);
+//        usuario = facturaDetalleRepository.save(usuario);
+//        return MapperUtils.DtoFromEntity(usuario, FacturaDetalleDTO.class);
+//    }
 
     @Override
-    @Transactional
-    public FacturaDetalleDTO create(FacturaDetalleDTO facturaDetalle) throws ProductoConDescuentoMayorAlPermitidoException {
-
-        Optional<ProductoPrecioDTO> productoPrecio = productoPrecioService.findById(facturaDetalle.getProducto().getId());
-
-        if (productoPrecio.isEmpty()) {
-            //TODO:implementar verificar existencia de asignacion de precios
-            return null;
-        }
-        if (facturaDetalle.getDescuento_final() > productoPrecio.get().getDescuentoMaximo()) {
-            throw new ProductoConDescuentoMayorAlPermitidoException("Se intenta facturar un producto con un descuento mayor al permitido");
-        }
-        FacturaDetalle usuario = MapperUtils.EntityFromDto(facturaDetalle, FacturaDetalle.class);
-        usuario = facturaDetalleRepository.save(usuario);
-        return MapperUtils.DtoFromEntity(usuario, FacturaDetalleDTO.class);
+     @Transactional
+    public FacturaDetalleDTO create(FacturaDetalleDTO facturaDetalleDTO) {
+        FacturaDetalle facturaDetalle = MapperUtils.EntityFromDto(facturaDetalleDTO, FacturaDetalle.class);
+        facturaDetalle = facturaDetalleRepository.save(facturaDetalle);
+        return MapperUtils.DtoFromEntity(facturaDetalle, FacturaDetalleDTO.class);
     }
 
 
