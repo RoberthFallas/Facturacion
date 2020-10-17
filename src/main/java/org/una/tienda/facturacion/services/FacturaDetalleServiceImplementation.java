@@ -58,7 +58,7 @@ public class FacturaDetalleServiceImplementation implements IFacturaDetalleServi
     @Transactional
     public FacturaDetalleDTO create(FacturaDetalleDTO facturaDetalle) throws ProductoConDescuentoMayorAlPermitidoException {
 
-        Optional<ProductoPrecioDTO> productoPrecio = productoPrecioService.findById(facturaDetalle.getProducto().getId());
+        Optional<ProductoPrecioDTO> productoPrecio = productoPrecioService.findById(facturaDetalle.getProductoId().getId());
 
         if (productoPrecio.isEmpty()) {
             //TODO:implementar verificar existencia de asignacion de precios

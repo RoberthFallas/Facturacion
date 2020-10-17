@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.una.tienda.facturacion.dto.FacturaDetalleDTO;
+import org.una.tienda.facturacion.dto.ProductoDTO;
+import org.una.tienda.facturacion.dto.ProductoPrecioDTO;
+import org.una.tienda.facturacion.entities.ProductoPrecio;
 
 import java.util.Optional;
 
@@ -16,8 +19,13 @@ class FacturaDetalleServiceImplementationTest {
 
     @Autowired
     private IFacturaDetalleService facturaDetalleService;
+    @Autowired
+    private IProductoService productoService;
+    @Autowired
+    private IProductoPrecioService productoPrecio;
 
     FacturaDetalleDTO facturaDetalleEjemplo;
+    ProductoDTO productoEjemplo;
 
     @BeforeEach
     public void setup() {
@@ -88,20 +96,41 @@ class FacturaDetalleServiceImplementationTest {
         }
     }
 
+    private void initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
+        ProductoPrecioDTO productoPrecioDTO = new ProductoPrecioDTO();
+        productoPrecioDTO.setDescuentoMaximo(10000.0);
+        productoPrecioDTO.setPrecioColones(100000.0);
+        productoEjemplo = new ProductoDTO();
+        productoEjemplo.setDescripcion("none");
+        productoEjemplo.setImpuesto(13000.0);
+        productoEjemplo = productoService.create(productoEjemplo);
+        productoPrecioDTO.setProducto(productoEjemplo);
+        ProductoPrecioDTO productoPrecioDTO1 = productoPrecio.create(productoPrecioDTO);
+        facturaDetalleEjemplo = new FacturaDetalleDTO() {
+            {
+                setProductoId(productoEjemplo);
+                setCantidad(100);
+                setDescuento_final(12000);
+            }
+        };
+
+        facturaDetalleEjemplo = facturaDetalleService.create(facturaDetalleEjemplo);
+
+    }
+
     @Test
     public void seEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
         initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido();
 
         assertThrows(ProductoConDescuentoMayorAlPermitidoException.class,
                 () -> {
-                    FacturaDetalleDTO facturaDetallePruebaConExtraDescuento = new FacturaDetalleDTO();
-                    facturaDetalleService.create(facturaDetallePruebaConExtraDescuento);
+
+                    facturaDetalleService.create(facturaDetalleEjemplo);
                 }
         );
     }
 
-    private void initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
-    }
+
 
 
 }
