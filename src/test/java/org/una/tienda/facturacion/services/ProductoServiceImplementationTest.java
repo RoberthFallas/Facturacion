@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.una.tienda.facturacion.dto.ProductoDTO;
 
 import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,6 +43,36 @@ public class ProductoServiceImplementationTest {
 
         } else {
             fail("No se encontro la información en la BD");
+        }
+    }
+      @Test
+    public void sePuedeModificarUnProductoCorrectamente() {
+
+        productoEjemplo = productoService.create(productoEjemplo);
+        productoEjemplo.setDescripcion("Producto en mal estado");
+        productoService.update(productoEjemplo, productoEjemplo.getId());
+        Optional<ProductoDTO> productoEncontrado = productoService.findById(productoEjemplo.getId());
+
+        if (productoEncontrado.isPresent()) {
+            ProductoDTO producto = productoEncontrado.get();
+            Assertions.assertEquals(productoEjemplo.getId(), producto.getId());
+            Assertions.assertEquals(productoEjemplo.getDescripcion(), producto.getDescripcion());
+            Assertions.assertEquals(productoEjemplo.getImpuesto(), producto.getImpuesto());
+        } else {
+            fail("No se encontro la información en la BD");
+        }
+    }
+     @Test
+    public void sePuedeEliminarUnProductoCorrectamente() {
+        productoEjemplo = productoService.create(productoEjemplo);
+        productoService.delete(productoEjemplo.getId());
+        Optional<ProductoDTO> productoEliminar= productoService.findById(productoEjemplo.getId());
+
+        if (productoEliminar != null) {
+            fail("El objeto no se ha eliminado de la BD");
+        }else{
+            productoEjemplo = null;
+            Assertions.assertTrue(true);
         }
     }
 
