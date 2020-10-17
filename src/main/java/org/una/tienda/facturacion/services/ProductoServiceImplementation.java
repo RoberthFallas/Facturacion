@@ -24,7 +24,7 @@ public class ProductoServiceImplementation implements IProductoService {
     @Autowired
     private IProductoRepository productoRepository;
 
-        private Optional<ProductoDTO> oneToDto(Optional<Producto> one) {
+    private Optional<ProductoDTO> oneToDto(Optional<Producto> one) {
         if (one.isPresent()) {
             ProductoDTO ProductoDTO = MapperUtils.DtoFromEntity(one.get(),   ProductoDTO.class);
             return Optional.ofNullable(ProductoDTO);
@@ -47,7 +47,7 @@ public class ProductoServiceImplementation implements IProductoService {
         return MapperUtils.DtoFromEntity(usuario, ProductoDTO.class);
     }
 
-   @Override
+    @Override
     @Transactional
     public void delete(Long id) {
         productoRepository.deleteById(id);
