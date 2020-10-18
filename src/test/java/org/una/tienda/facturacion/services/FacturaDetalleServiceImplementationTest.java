@@ -1,37 +1,50 @@
 package org.una.tienda.facturacion.services;
 
+import ch.qos.logback.core.joran.util.beans.BeanDescriptionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.una.tienda.facturacion.dto.FacturaDetalleDTO;
+import org.una.tienda.facturacion.dto.*;
+import org.una.tienda.facturacion.exceptions.ProductoConDescuentoMayorAlPermitidoException;
+
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class FacturaDetalleServiceImplementationTest {
 
     @Autowired
     private IFacturaDetalleService facturaDetalleService;
+    @Autowired
+    private IProductoService productoService;
+    @Autowired
+    private IProductoPrecioService productoPrecio;
+    @Autowired
+    private IProductoExistenciaService productoExistenciaService;
+    @Autowired
+    private IClienteService clienteService;
+    @Autowired
+    private IFacturaService facturaService;
 
     FacturaDetalleDTO facturaDetalleEjemplo;
+    ProductoDTO productoEjemplo;
+    ProductoDTO productoPrueba;
+    ProductoExistenciaDTO productoExistenciaPrueba;
+    ProductoPrecioDTO productoPrecioPrueba;
+    ClienteDTO clientePrueba;
+    FacturaDTO  facturaPrueba;
+    FacturaDetalleDTO facturaDetallePruebaConExtraDescuento = new FacturaDetalleDTO();
 
-    @BeforeEach
-    public void setup() {
-        facturaDetalleEjemplo = new FacturaDetalleDTO() {
-            {
-                setCantidad(2);
-                setDescuento_final(0.10);
-            }
-        };
-    }
 
-    @Test
-    public void sePuedeCrearUnFacturaDetalleCorrectamente() {
+
+
+
+   /* @Test
+    public void sePuedeCrearUnFacturaDetalleCorrectamente()  {
 
         facturaDetalleEjemplo = facturaDetalleService.create(facturaDetalleEjemplo);
 
@@ -44,8 +57,13 @@ class FacturaDetalleServiceImplementationTest {
         } else {
             fail("No se encontro la información en la BD");
         }
-    }
+    }*/
 
+    @BeforeEach
+    public void setup() {
+        facturaDetallePruebaConExtraDescuento = new FacturaDetalleDTO() ;
+
+    }
     @AfterEach
     public void tearDown() {
         if (facturaDetalleEjemplo != null) {
@@ -56,7 +74,7 @@ class FacturaDetalleServiceImplementationTest {
     }
 
     @Test
-    public void sePuedeModificarUnFacturaDetalleCorrectamente() {
+    public void sePuedeModificarUnFacturaDetalleCorrectamente() throws  ProductoConDescuentoMayorAlPermitidoException {
         facturaDetalleEjemplo = facturaDetalleService.create(facturaDetalleEjemplo);
         facturaDetalleEjemplo.setCantidad(10);
 
@@ -73,7 +91,7 @@ class FacturaDetalleServiceImplementationTest {
     }
 
     @Test
-    public void sePuedeEliminarUnFacturaDetalleCorrectamente() {
+    public void sePuedeEliminarUnFacturaDetalleCorrectamente() throws ProductoConDescuentoMayorAlPermitidoException {
 
         facturaDetalleEjemplo = facturaDetalleService.create(facturaDetalleEjemplo);
 
@@ -83,24 +101,90 @@ class FacturaDetalleServiceImplementationTest {
 
         if (facturaDetalleEncontrado != null) {
             fail("El objeto no se ha eliminado de la BD");
-        } else {
+        }else{
             facturaDetalleEjemplo = null;
             Assertions.assertTrue(true);
         }
     }
 
-//    @Test
-//    public void seEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
-//        initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido();
-//
-//        assertThrows(ProductoConDescuentoMayorAlPermitidoException.class,
-//                () -> {
-//                    FacturaDetalleDTO facturaDetallePruebaConExtraDescuento = new FacturaDetalleDTO();
-//                    facturaDetalleService.create(facturaDetallePruebaConExtraDescuento);
-//                }
-//        );
-//    }
-//
-//    private void initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
-//    }
+    private void initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
+        productoPrueba = new ProductoDTO() {
+            {
+                setDescripcion("Producto De Ejemplo");
+                setImpuesto(0.10);
+            }
+        };
+        productoPrueba = productoService.create(productoPrueba);
+
+        productoExistenciaPrueba = new ProductoExistenciaDTO() {
+            {
+                setProducto(productoPrueba);
+                setCantidad(1);
+            }
+        };
+
+        productoExistenciaPrueba = productoExistenciaService.create(productoExistenciaPrueba);
+
+
+
+        productoPrecioPrueba = new ProductoPrecioDTO() {
+            {
+                setProducto(productoPrueba);
+                setPrecioColones((double) 1000);
+                setDescuentoMaximo((double) 10);
+                setDescuentoPromocional((double) 2);
+            }
+        };
+        productoPrecioPrueba = productoPrecio.create(productoPrecioPrueba);
+
+
+
+
+        clientePrueba = new ClienteDTO() {
+            {
+                setNombre("ClienteDePrueba");
+            }
+        };
+        clientePrueba = clienteService.create(clientePrueba);
+
+
+
+        facturaPrueba = new FacturaDTO() {
+            {
+                setCaja(991);
+                setCliente(clientePrueba);
+            }
+        };
+        facturaPrueba = facturaService.create(facturaPrueba);
+
+
+
+        facturaDetallePruebaConExtraDescuento = new FacturaDetalleDTO() {
+            {
+                setCantidad(1);
+                setProducto(productoPrueba);
+                setFactura(facturaPrueba);
+                setDescuentoFinal(productoPrecioPrueba.getDescuentoMaximo() + 1);
+            }
+        };
+
+
+
+    }
+
+
+    @Test
+    public void seEvitaFacturarUnProductoConDescuentoMayorAlPermitido() {
+        initDataForSeEvitaFacturarUnProductoConDescuentoMayorAlPermitido();
+
+        assertThrows(ProductoConDescuentoMayorAlPermitidoException.class,
+                () -> {
+                    facturaDetalleService.create(facturaDetallePruebaConExtraDescuento);
+                }
+        );
+    }
+
+
+
+
 }

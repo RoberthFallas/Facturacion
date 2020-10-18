@@ -27,22 +27,26 @@ public class ProductoPrecioServiceImplementation implements IProductoPrecioServi
     @Override
     @Transactional
     public ProductoPrecioDTO create(ProductoPrecioDTO productoPrecioDTO) {
+        System.out.println(productoPrecioDTO.getProducto().getId());
         ProductoPrecio productoPrecio = MapperUtils.EntityFromDto(productoPrecioDTO, ProductoPrecio.class);
         productoPrecio = productoRepository.save(productoPrecio);
         return MapperUtils.DtoFromEntity(productoPrecio, ProductoPrecioDTO.class);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         productoRepository.deleteById(id);
     }
 
     @Override
+    @Transactional (readOnly = true)
     public Optional<ProductoPrecioDTO> findById(Long id) {
         return oneToDto(productoRepository.findById(id));
     }
 
     @Override
+    @Transactional
     public Optional<ProductoPrecioDTO> update(ProductoPrecioDTO precioDTO, Long id) {
         if (productoRepository.findById(id).isPresent()) {
             ProductoPrecio productoPrecio = MapperUtils.EntityFromDto(precioDTO, ProductoPrecio.class);

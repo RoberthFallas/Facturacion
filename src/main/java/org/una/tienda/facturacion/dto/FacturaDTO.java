@@ -27,4 +27,5 @@ public class FacturaDTO {
     private Boolean estado;
     private Date fechaRegistro;
     private Date fechaModificacion;
+    private ClienteDTO cliente;
 }

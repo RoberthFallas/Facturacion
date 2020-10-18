@@ -33,16 +33,19 @@ public class ProductoExistenciaServiceImplementation implements IProductoExisten
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         productoExistenciaRepository.deleteById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<ProductoExistenciaDTO> findById(Long id) {
         return oneToDto(productoExistenciaRepository.findById(id));
     }
 
     @Override
+    @Transactional
     public Optional<ProductoExistenciaDTO> update(ProductoExistenciaDTO productoExistenciaDTO, Long id) {
         if (productoExistenciaRepository.findById(id).isPresent()) {
             ProductoExistencia productoExistencia = MapperUtils.EntityFromDto(productoExistenciaDTO, ProductoExistencia.class);
