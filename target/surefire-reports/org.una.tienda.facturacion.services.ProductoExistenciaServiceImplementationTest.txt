@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.una.tienda.facturacion.services.ProductoExistenciaServiceImplementationTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.694 s - in org.una.tienda.facturacion.services.ProductoExistenciaServiceImplementationTest
